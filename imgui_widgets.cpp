@@ -4680,7 +4680,7 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
             }
           
             if (is_multiline)
-                text_size = InputTextCalcTextSizeW(text_begin, text_end);
+                text_size = InputTextCalcTextSizeW(text_begin, text_end, NULL, NULL, false, word_wrap_width);
         }
 
         // Scroll
@@ -4732,8 +4732,10 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
             {
                 if (rect_pos.y > clip_rect.w + g.FontSize)
                     break;
-                if (rect_pos.y < clip_rect.y)
+                if (!has_word_wrap && rect_pos.y < clip_rect.y)
                 {
+                    // FIXME: This doesn't work properly with word wrapping
+                    //
                     //p = (const ImWchar*)wmemchr((const wchar_t*)p, '\n', text_selected_end - p);  // FIXME-OPT: Could use this when wchar_t are 16-bit
                     //p = p ? p + 1 : text_selected_end;
                     while (p < text_selected_end)
